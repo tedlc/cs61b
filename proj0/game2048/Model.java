@@ -139,10 +139,28 @@ public class Model extends Observable {
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
-
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+
+        // move all the tile up to make them adjacent
+        for (int col = 0; col < board.size(); col++) {
+            for (int row = 0; row < board.size(); row++) {
+                Tile t = board.tile(col, row);
+                int counter = 0;
+                while (counter + row < board.size()) {
+                    if (board.tile(col, row + counter) == null) {
+                        counter += 1;
+                    } else {
+                        board.move(col, row + counter, t);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // merge the tile with same number
+
 
         checkGameOver();
         if (changed) {
@@ -150,6 +168,7 @@ public class Model extends Observable {
         }
         return changed;
     }
+
 
     /**
      * Checks if the game is over and sets the gameOver variable
