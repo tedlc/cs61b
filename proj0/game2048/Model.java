@@ -159,6 +159,8 @@ public class Model extends Observable {
                                 changed = true;
                                 row = counter;
                                 break;
+                            } else {
+                                break;
                             }
                         } else {
                             continue;
