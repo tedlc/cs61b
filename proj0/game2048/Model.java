@@ -143,23 +143,50 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
-        // move all the tile up to make them adjacent
+        // tilt the board to the side
+        board.setViewingPerspective(side);
+        // merge all equal numbers
         for (int col = 0; col < board.size(); col++) {
-            for (int row = 0; row < board.size(); row++) {
-                Tile t = board.tile(col, row);
-                int counter = 0;
-                while (counter + row < board.size()) {
-                    if (board.tile(col, row + counter) == null) {
-                        counter += 1;
-                    } else {
-                        board.move(col, row + counter, t);
-                        break;
+            for (int row = board.size() - 1; row >= 0; row--) {
+                Tile t1 = board.tile(col, row);
+                if (t1 != null) {
+                    for (int counter = row - 1; counter >= 0; counter--) {
+                        Tile t2 = board.tile(col, counter);
+                        if (t2 != null) {
+                            if (t1.value() == t2.value()) {
+                                board.move(col, row, t2);
+                                score += t1.value() * 2;
+                                changed = true;
+                                row = counter;
+                                break;
+                            }
+                        } else {
+                            continue;
+                        }
                     }
                 }
             }
         }
 
-        // merge the tile with same number
+        // put rest of adjancent blocks together
+        for (int col = 0; col < board.size(); col++) {
+            for (int row = board.size() - 1; row >= 0; row--) {
+                Tile t1 = board.tile(col, row);
+                if (t1 == null) {
+                    for (int counter = row - 1; counter >= 0; counter--) {
+                        Tile t2 = board.tile(col, counter);
+                        if (t2 != null) {
+                            board.move(col, row, t2);
+                            changed = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // put the board back
+        board.setViewingPerspective(Side.NORTH);
 
 
         checkGameOver();
