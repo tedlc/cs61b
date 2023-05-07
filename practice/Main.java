@@ -1,15 +1,21 @@
-import org.graalvm.compiler.core.common.util.IntList;
-
 public class Main{
-    public int first;
-    public IntList rest;
 
-    public IntList(int f, IntList r){
-        first = f;
-        rest = r;
+    public static int fib(int n){
+        // base case
+        if (n <= 1){
+            return n;
+        }
+        // recursion
+        else{
+            return fib(n - 1) + fib(n - 2);
+        }
     }
 
     public static void main(String[] args){
-
+        int n = 7;
+        int result = 13;
+        int output = fib(n);
+        boolean out = (result == output);
+        System.out.println(out);
     }
 }
